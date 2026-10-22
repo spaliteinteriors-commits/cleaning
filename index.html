@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newtown Cleaning Services — Quick Quote Calculator</title>
+<style>
+  :root { --blue:#1769aa; --navy:#12334d; --pale:#eef6fc; --line:#d6e1e9; --ink:#172b3a; --muted:#5c6d79; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px 14px; background:#f3f6f8; color:var(--ink); font:16px/1.45 Arial,Helvetica,sans-serif; }
+  main { max-width:760px; margin:0 auto; }
+  header { background:linear-gradient(120deg,#12334d,#1769aa); color:white; border-radius:16px 16px 0 0; padding:24px; }
+  h1 { margin:0 0 6px; font-size:clamp(1.5rem,4vw,2rem); }
+  header p { margin:0; opacity:.92; }
+  .panel { background:white; border:1px solid var(--line); border-top:0; padding:22px; }
+  .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  label { display:block; font-weight:700; margin-bottom:6px; }
+  input,select,textarea { width:100%; border:1px solid #b8c8d4; border-radius:9px; padding:11px 12px; font:inherit; background:white; color:var(--ink); }
+  input:focus,select:focus,textarea:focus { outline:3px solid #b9dcf8; border-color:var(--blue); }
+  .field { min-width:0; }
+  .hint { color:var(--muted); font-size:.88rem; margin:6px 0 0; }
+  .result { background:var(--pale); border:1px solid #c9e1f4; border-radius:12px; padding:18px; margin-top:20px; }
+  .result-label { color:var(--muted); font-size:.95rem; }
+  .price { font-size:2.4rem; font-weight:800; color:var(--navy); margin:2px 0 8px; }
+  .breakdown { display:flex; flex-wrap:wrap; gap:8px 20px; font-size:.92rem; }
+  .buttons { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  button { border:0; border-radius:9px; padding:12px 16px; font:700 1rem Arial,sans-serif; cursor:pointer; }
+  .primary { background:var(--blue); color:white; }
+  .secondary { background:#e7edf2; color:var(--navy); }
+  .footer { color:var(--muted); font-size:.86rem; padding:0 22px 22px; background:white; border:1px solid var(--line); border-top:0; border-radius:0 0 16px 16px; }
+  .notice { margin-top:12px; }
+  h2 { margin:0 0 12px; color:var(--navy); font-size:1.25rem; }
+  .checklist { display:grid; gap:12px; margin-top:16px; }
+  .check-item { display:flex; align-items:flex-start; gap:10px; font-weight:400; margin:0; }
+  .check-item input { width:18px; height:18px; flex:0 0 auto; margin-top:2px; accent-color:var(--blue); }
+  .script-box { background:#f7fafc; border-left:4px solid var(--blue); padding:16px; border-radius:7px; white-space:pre-line; margin:12px 0; }
+  .profit-list { padding-left:22px; margin:12px 0 0; }
+  .profit-list li { margin:0 0 10px; padding-left:3px; }
+  @media(max-width:560px) { .grid { grid-template-columns:1fr; } body { padding:12px 8px; } header,.panel { padding:18px; } .price { font-size:2rem; } }
+  @media print { body { background:white; padding:0; } header { border-radius:0; } .buttons,.hint { display:none; } main { max-width:none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Newtown Cleaning Services</h1>
+    <p>Quick Quote Calculator · Indoor &amp; Outdoor Cleaning</p>
+  </header>
+  <section class="panel" aria-label="Quote details">
+    <div class="grid">
+      <div class="field">
+        <label for="service">Cleaning service</label>
+        <select id="service">
+          <option value="regular">Regular domestic cleaning — £25/hour</option>
+          <option value="standard">One-off standard clean — £28/hour</option>
+          <option value="deep">Deep clean — £33/hour</option>
+          <option value="builders">After-builders clean — £33/hour</option>
+          <option value="windows">Exterior window cleaning — fixed estimate</option>
+          <option value="gutters">Gutter clearing — fixed estimate</option>
+          <option value="driveway">Driveway pressure washing — fixed estimate</option>
+          <option value="patio">Patio pressure washing — fixed estimate</option>
+          <option value="oven">Single oven cleaning — fixed estimate</option>
+          <option value="endtenancy">End-of-tenancy cleaning — fixed estimate</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="size">Property / job size</label>
+        <select id="size">
+          <option value="small">Small</option>
+          <option value="medium" selected>Medium</option>
+          <option value="large">Large</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="condition">Condition</label>
+        <select id="condition">
+          <option value="normal">Normal</option>
+          <option value="dirty">Quite dirty (+20%)</option>
+          <option value="heavy">Very dirty / neglected (+40%)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="hours">Estimated labour hours</label>
+        <input id="hours" type="number" min="1" max="100" step="0.5" value="3">
+        <p class="hint">Used in the quote for all services. Enter total team-hours (e.g. 2 people × 3 hours = 6).</p>
+      </div>
+      <div class="field">
+        <label for="extras">Extra work / materials (£)</label>
+        <input id="extras" type="number" min="0" step="0.5" value="0">
+      </div>
+      <div class="field">
+        <label for="travel">Travel / parking (£)</label>
+        <input id="travel" type="number" min="0" step="0.5" value="0">
+      </div>
+      <div class="field">
+        <label for="customer">Customer name (optional)</label>
+        <input id="customer" type="text" placeholder="Customer name">
+      </div>
+      <div class="field">
+        <label for="address">Address / postcode (optional)</label>
+        <input id="address" type="text" placeholder="Job address or postcode">
+      </div>
+    </div>
+    <div class="result" aria-live="polite">
+      <div class="result-label">Suggested quote (GBP)</div>
+      <div class="price" id="total">£75.00</div>
+      <div class="breakdown">
+        <span>Service estimate: <strong id="base">£75.00</strong></span>
+        <span>Extras: <strong id="extraTotal">£0.00</strong></span>
+        <span>Travel: <strong id="travelTotal">£0.00</strong></span>
+      </div>
+      <p class="hint" id="calculationNote">Estimate only. Confirm the scope and access before agreeing the final price.</p>
+    </div>
+    <div class="buttons">
+      <button class="primary" id="copyBtn" type="button">Copy quote summary</button>
+      <button class="secondary" id="printBtn" type="button">Print / Save as PDF</button>
+      <button class="secondary" id="resetBtn" type="button">Reset</button>
+    </div>
+    <p class="hint notice" id="status" role="status"></p>
+  </section>
+  <section class="panel" aria-labelledby="phone-questions-title">
+    <h2 id="phone-questions-title">4. What to ask every customer on the phone</h2>
+    <p class="hint">Use this checklist while you speak to the customer.</p>
+    <div class="checklist">
+      <label class="check-item"><input type="checkbox"> What is the full address and postcode?</label>
+      <label class="check-item"><input type="checkbox"> What exactly needs cleaning?</label>
+      <label class="check-item"><input type="checkbox"> How big is the property or area? How many bedrooms, bathrooms or windows?</label>
+      <label class="check-item"><input type="checkbox"> When was it last professionally cleaned?</label>
+      <label class="check-item"><input type="checkbox"> Is there heavy dirt, grease, moss, mould or built-up debris?</label>
+      <label class="check-item"><input type="checkbox"> Is access straightforward, or are ladders or specialist equipment needed?</label>
+      <label class="check-item"><input type="checkbox"> Is this a one-off job or a regular service?</label>
+      <label class="check-item"><input type="checkbox"> Can they send photos to help you quote accurately?</label>
+    </div>
+  </section>
+  <section class="panel" aria-labelledby="call-script-title">
+    <h2 id="call-script-title">5. Simple script to use when customers call</h2>
+    <div class="script-box" id="callScript">“Thanks for calling Newtown Cleaning Services. I can certainly help with a quote. Can I ask a few quick questions about the property and the cleaning you need?\n\nOnce I know the size, condition and access, I’ll give you a price before any work starts. For larger jobs, I may ask for photos or arrange a quick visit so I can quote accurately.”</div>
+    <button class="secondary" type="button" id="copyScriptBtn">Copy call script</button>
+  </section>
+  <section class="panel" aria-labelledby="profit-title">
+    <h2 id="profit-title">6. Protect your profit</h2>
+    <ul class="profit-list">
+      <li><strong>Set a minimum call-out:</strong> consider £40–£50 per visit to help cover travel, setup and equipment.</li>
+      <li><strong>Charge appropriately for one-off and deep cleans:</strong> they often take longer than routine maintenance.</li>
+      <li><strong>Ask for photos:</strong> especially for driveways, gutters and heavily soiled properties.</li>
+      <li><strong>Be clear about what's included:</strong> for example, pressure washing alone versus pressure washing plus re-sanding or waste removal.</li>
+      <li><strong>Allow for difficult access:</strong> height, parking, specialist products and extra equipment can add time and risk.</li>
+      <li><strong>Track every job:</strong> record the quote, time taken, travel and materials, then review prices after your first 10–20 jobs.</li>
+      <li><strong>Confirm the price before starting:</strong> if the scope changes, explain any extra cost and get the customer's agreement first.</li>
+    </ul>
+  </section>
+  <div class="footer">
+    <strong>Pricing note:</strong> These are editable starting estimates, not a guaranteed local price list. Check job size, access, condition, equipment and disposal requirements before confirming. The estimated labour hours field is included in every service estimate. For fixed-price outdoor jobs, the calculator compares the size-based starting price with an allowance of £25 per team-hour, adjusted for condition, and uses the higher amount.
+  </div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const rates = { regular:25, standard:28, deep:33, builders:33 };
+  const fixed = {
+    windows: {small:20, medium:30, large:45},
+    gutters: {small:75, medium:105, large:150},
+    driveway: {small:105, medium:175, large:285},
+    patio: {small:80, medium:140, large:200},
+    oven: {small:55, medium:55, large:65},
+    endtenancy: {small:140, medium:220, large:320}
+  };
+  const sizeFactor = {small:.85, medium:1, large:1.25};
+  const conditionFactor = {normal:1, dirty:1.2, heavy:1.4};
+  const money = n => new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(n);
+  function calculate() {
+    const service = $('service').value;
+    const size = $('size').value;
+    const condition = $('condition').value;
+    const hours = Math.max(1, Number($('hours').value) || 1);
+    const extras = Math.max(0, Number($('extras').value) || 0);
+    const travel = Math.max(0, Number($('travel').value) || 0);
+    let base;
+    let note;
+    if (rates[service]) {
+      base = Math.max(service === 'regular' ? 40 : 45, hours * rates[service] * sizeFactor[size] * conditionFactor[condition]);
+      note = `Hourly estimate at ${money(rates[service])} per team-hour, adjusted for size and condition.`;
+    } else {
+      const sizeBasedPrice = fixed[service][size] * conditionFactor[condition];
+      const labourAllowance = hours * 25 * conditionFactor[condition];
+      base = Math.max(sizeBasedPrice, labourAllowance);
+      note = `Outdoor/fixed-job estimate: higher of the size-based starting price (${money(sizeBasedPrice)}) or labour allowance (${money(labourAllowance)} at £25 per team-hour), adjusted for condition. Confirm measurements, access and scope.`;
+    }
+    base = Math.round(base * 100) / 100;
+    const total = base + extras + travel;
+    $('base').textContent = money(base);
+    $('extraTotal').textContent = money(extras);
+    $('travelTotal').textContent = money(travel);
+    $('total').textContent = money(total);
+    $('calculationNote').textContent = note + ' Final price should be confirmed after checking the job.';
+    return {service, base, extras, travel, total, hours, size, condition};
+  }
+  function summary() {
+    const c = calculate();
+    const serviceName = $('service').selectedOptions[0].text.split(' — ')[0];
+    const lines = [
+      'Newtown Cleaning Services — Quote Estimate',
+      $('customer').value.trim() ? 'Customer: ' + $('customer').value.trim() : '',
+      $('address').value.trim() ? 'Address: ' + $('address').value.trim() : '',
+      'Service: ' + serviceName,
+      'Job size: ' + $('size').selectedOptions[0].text,
+      'Condition: ' + $('condition').selectedOptions[0].text,
+      'Estimated labour hours: ' + c.hours,
+      'Service estimate: ' + money(c.base),
+      'Extra work / materials: ' + money(c.extras),
+      'Travel / parking: ' + money(c.travel),
+      'Suggested total: ' + money(c.total),
+      '',
+      'Estimate only; final price subject to confirming job scope, access and condition.'
+    ];
+    return lines.filter((line, i) => line !== '' || (i > 0 && lines[i-1] !== '')).join('\n');
+  }
+  ['service','size','condition','hours','extras','travel'].forEach(id => {
+    $(id).addEventListener('input', calculate);
+    $(id).addEventListener('change', calculate);
+  });
+  $('copyBtn').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(summary());
+      $('status').textContent = 'Quote summary copied.';
+    } catch (e) {
+      const textArea = document.createElement('textarea');
+      textArea.value = summary(); document.body.appendChild(textArea); textArea.select();
+      const ok = document.execCommand('copy'); textArea.remove();
+      $('status').textContent = ok ? 'Quote summary copied.' : 'Copy was blocked by your browser. You can print or save as PDF instead.';
+    }
+  });
+  $('printBtn').addEventListener('click', () => window.print());
+  $('copyScriptBtn').addEventListener('click', async () => {
+    const script = $('callScript').innerText.replace(/[“”]/g, '');
+    try { await navigator.clipboard.writeText(script); $('status').textContent = 'Call script copied.'; }
+    catch (e) { $('status').textContent = 'Copy was blocked by your browser. You can select the script text and copy it manually.'; }
+  });
+  $('resetBtn').addEventListener('click', () => {
+    $('service').value='regular'; $('size').value='medium'; $('condition').value='normal';
+    $('hours').value='3'; $('extras').value='0'; $('travel').value='0';
+    $('customer').value=''; $('address').value=''; $('status').textContent='';
+    calculate();
+  });
+  calculate();
+})();
+</script>
+</body>
+</html>
